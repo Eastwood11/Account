@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>记账本</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Microsoft Yahei', sans-serif;
+    }
+    body {
+      padding: 40px 20%;
+      background: #ffffff;
+    }
+    h1 {
+      font-size: 32px;
+      font-weight: normal;
+      margin-bottom: 30px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .record-item {
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      position: relative; /* 关键：给删除按钮做父级定位 */
+    }
+    .record-date {
+      padding: 10px 16px;
+      font-size: 16px;
+    }
+    .record-date.out {
+      background-color: #f8e0e0;
+      color: #992222;
+    }
+    .record-date.in {
+      background-color: #e2f2e2;
+      color: #227722;
+    }
+    .record-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: #fff;
+    }
+    .record-desc {
+      font-size: 17px;
+    }
+    .record-tag {
+      padding: 4px 10px;
+      border-radius: 3px;
+      color: white;
+      font-size: 14px;
+      margin: 0 20px;
+    }
+    .tag-out {
+      background-color: #f2a038;
+    }
+    .tag-in {
+      background-color: #46b85c;
+    }
+    .record-money {
+      font-size: 17px;
+    }
+    /* 新增删除按钮样式 */
+    .del-x {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      width:26px;
+      height:26px;
+      border-radius:50%;
+      background:#e74c3c;
+      color:#fff;
+      text-align:center;
+      line-height:26px;
+      text-decoration:none;
+      font-weight:bold;
+      display:none; /* 默认隐藏 */
+    }
+    .del-x:hover{
+      background:#c0392b;
+    }
+    /* 悬浮条目才展示叉号 */
+    .record-item:hover .del-x{
+      display:block;
+    }
+    .btn-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .btn {
+      display: block;
+      margin: 0 auto;
+      padding: 12px 24px;
+      background-color: #347fc4;
+      color: white;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 2px;
+      text-align: right;
+      margin-bottom: 20px;
+      text-decoration: none;
+    }
+    .btn:hover {
+      background-color: #2b69a6;
+    }
+  </style>
+</head>
+<body>
+  <p class="btn-container">
+    <h1>记账本</h1>
+    <a class="btn" href="/account/create">添加记录</a>
+    <form action="/logout" method="post">
+      <input type="submit" value="退出登录" class="btn" />
+    </form>
+  </p>
+  <%
+    // 补零函数
+    function pad(num) {
+      return num < 10 ? '0' + num : num;
+    }
+  %>
+
+  <% accounts.forEach(function (account) { %>
+    <%
+      const dateObj = new Date(account.date);
+      const formatTime = `${dateObj.getFullYear()}-${pad(dateObj.getMonth() + 1)}-${pad(dateObj.getDate())} ${pad(dateObj.getHours())}:${pad(dateObj.getMinutes())}`;
+      // 统一type判断：-1支出，1收入
+      const isOut = account.type === -1 || account.type === "-1";
+    %>
+    <div class="record-item">
+      <!-- 删除按钮 -->
+      <a href="/account/delete/<%= account.id %>" class="del-x" onclick="return confirm('确定删除本条记录？')">x</a>
+
+      <div class="record-date <%= isOut ? 'out' : 'in' %>">
+        <%= formatTime %>
+      </div>
+      <div class="record-content">
+        <span class="record-desc"><%= account.remark %></span>
+        <div style="display: flex; align-items: center">
+          <span class="record-tag <%= isOut ? 'tag-out' : 'tag-in' %>">
+            <%= isOut ? '支出' : '收入' %>
+          </span>
+          <span class="record-money"><%= isOut ? '-' + account.money : account.money %> 元</span>
+        </div>
+      </div>
+    </div>
+  <% }) %>
+
+</body>
+</html>

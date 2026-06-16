@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>添加记录</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Microsoft Yahei', sans-serif;
+      }
+      body {
+        padding: 40px 20%;
+        background: #fff;
+      }
+      h1 {
+        font-size: 32px;
+        font-weight: normal;
+        margin-bottom: 40px;
+      }
+      .form-item {
+        margin-bottom: 24px;
+      }
+      .form-item label {
+        display: block;
+        font-size: 18px;
+        margin-bottom: 8px;
+      }
+      .form-item input,
+      .form-item select,
+      .form-item textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        font-size: 16px;
+      }
+      textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+      button {
+        width: 100%;
+        padding: 12px;
+        background-color: #347fc4;
+        color: white;
+        border: none;
+        font-size: 18px;
+        cursor: pointer;
+        border-radius: 2px;
+      }
+      button:hover {
+        background-color: #2b69a6;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>添加记录</h1>
+    <form action="/account" method="post">
+      <div class="form-item">
+        <label>事项</label>
+        <input type="text" name="title" />
+      </div>
+      <div class="form-item">
+        <label>发生时间</label>
+        <input type="datetime-local" name="date" />
+      </div>
+      <div class="form-item">
+        <label>类型</label>
+        <select name="type">
+          <option value="-1">支出</option>
+          <option value="1">收入</option>
+        </select>
+      </div>
+      <div class="form-item">
+        <label>金额</label>
+        <input type="number" step="0.01" name="money" />
+      </div>
+      <div class="form-item">
+        <label>备注</label>
+        <textarea name="remark"></textarea>
+      </div>
+      <button type="submit">提交添加</button>
+    </form>
+  </body>
+</html>
